@@ -10,7 +10,6 @@ on:
 env:
   AZURE_WEBAPP_NAME: aa-recovery-app
   AZURE_WEBAPP_PACKAGE_PATH: '.'
-  NODE_VERSION: '20.x'
 
 jobs:
   build-and-deploy:
@@ -19,28 +18,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - name: 'Docker Login'
+      uses: azure/docker-login@v1
       with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
+        login-server: aaapp.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
 
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Build Next.js app
-      run: npm run build
-      env:
-        COSMOS_ENDPOINT: ${{ secrets.COSMOS_ENDPOINT }}
-        COSMOS_KEY: ${{ secrets.COSMOS_KEY }}
-        COSMOS_DATABASE: ${{ secrets.COSMOS_DATABASE }}
-        AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
-        AZURE_OPENAI_KEY: ${{ secrets.AZURE_OPENAI_KEY }}
-        AZURE_OPENAI_DEPLOYMENT: ${{ secrets.AZURE_OPENAI_DEPLOYMENT }}
+    - name: Build and Push Docker Image
+      run: |
+        docker build . -t aaapp.azurecr.io/aa-recovery-app:latest
+        docker push aaapp.azurecr.io/aa-recovery-app:latest
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        images: 'aaapp.azurecr.io/aa-recovery-app:latest'
