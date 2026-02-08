@@ -43,3 +43,13 @@ deploy-output.log
 deploy.zip
 deployment.log
 git-deploy.log
+
+# Mobile - Android
+android/app/build/
+android/.gradle/
+android/local.properties
+
+# Mobile - iOS
+ios/App/App.xcodeproj/project.xcworkspace/
+ios/App/App.xcodeproj/xcuserdata/
+ios/pods/
