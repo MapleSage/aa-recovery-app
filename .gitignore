@@ -1,0 +1,65 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env*.local
+.env
+.env.*
+!.env.example
+!env.template
+
+# Vercel
+.vercel
+
+# Typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Deployment artifacts / Large files
+*.zip
+*.log
+zi*
+.kiro/
+deploy-lean.zip
+deploy-output.log
+deploy.zip
+deployment.log
+git-deploy.log
+
+# Local credentials / cloud publish profiles
+.deploy_creds
+creds.json
+publish-profile.xml
+
+# Mobile - Android
+android/
+android/app/build/
+android/.gradle/
+android/local.properties
+
+# Mobile - iOS
+ios/
+ios/App/App.xcodeproj/project.xcworkspace/
+ios/App/App.xcodeproj/xcuserdata/
+ios/pods/

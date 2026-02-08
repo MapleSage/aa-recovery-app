@@ -1,0 +1,37 @@
+# Azure Web App deployment configuration
+name: Deploy to Azure App Service
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: aa-recovery-app
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: 'Docker Login'
+      uses: azure/docker-login@v1
+      with:
+        login-server: aaapp.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build . -t aaapp.azurecr.io/aa-recovery-app:latest
+        docker push aaapp.azurecr.io/aa-recovery-app:latest
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        images: 'aaapp.azurecr.io/aa-recovery-app:latest'
