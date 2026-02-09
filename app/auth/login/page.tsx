@@ -1,5 +1,5 @@
-import LoginExperience from '@/components/auth/LoginExperience';
+import { redirect } from 'next/navigation';
 
 export default function LoginPage() {
-  return <LoginExperience />;
+  redirect('/auth/signup');
 }

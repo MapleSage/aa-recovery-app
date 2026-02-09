@@ -169,7 +169,7 @@ export const authOptions: NextAuthOptions = {
   },
   providers,
   pages: {
-    signIn: '/auth/login',
+    signIn: '/auth/signup',
   },
   callbacks: {
     async signIn({ user }) {

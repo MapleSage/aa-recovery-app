@@ -144,7 +144,7 @@ export default function LoginExperience(props: { variant?: 'login' | 'signup' } 
   const title = variant === 'signup' ? 'Create Your Account' : 'Secure Recovery Login';
   const subtitle =
     variant === 'signup'
-      ? 'Start with a social provider. After signing in, you can add passkey biometrics.'
+      ? 'Start with a social provider. After you create an account, you can add passkey biometrics.'
       : 'Sign in with social identity or passkey biometrics.';
 
   return (
@@ -180,15 +180,17 @@ export default function LoginExperience(props: { variant?: 'login' | 'signup' } 
           })}
         </div>
 
-        <button
-          className="auth-passkey-btn"
-          onClick={handlePasskeySignIn}
-          disabled={busyAction === 'passkey-login' || isLoading}
-        >
-          {busyAction === 'passkey-login'
-            ? 'Starting biometrics...'
-            : 'Use Face ID / Touch ID / Passkey'}
-        </button>
+        {variant !== 'signup' ? (
+          <button
+            className="auth-passkey-btn"
+            onClick={handlePasskeySignIn}
+            disabled={busyAction === 'passkey-login' || isLoading}
+          >
+            {busyAction === 'passkey-login'
+              ? 'Starting biometrics...'
+              : 'Use Face ID / Touch ID / Passkey'}
+          </button>
+        ) : null}
 
         {session?.user ? (
           <div className="auth-session-panel">
@@ -218,17 +220,13 @@ export default function LoginExperience(props: { variant?: 'login' | 'signup' } 
         </p>
         {notice ? <p className="auth-notice">{notice}</p> : null}
 
-        <div className="auth-alt">
-          {variant === 'signup' ? (
-            <p>
-              Already have an account? <Link href="/auth/login">Sign in</Link>
-            </p>
-          ) : (
+        {variant !== 'signup' ? (
+          <div className="auth-alt">
             <p>
               New here? <Link href="/auth/signup">Create an account</Link>
             </p>
-          )}
-        </div>
+          </div>
+        ) : null}
       </section>
     </main>
   );
