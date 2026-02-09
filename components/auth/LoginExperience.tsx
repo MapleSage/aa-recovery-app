@@ -4,6 +4,7 @@ import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { FaAmazon, FaFacebookF, FaGoogle, FaInstagram, FaLinkedinIn, FaMicrosoft } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 
@@ -31,7 +32,8 @@ async function parseJson<T>(response: Response): Promise<T> {
   return json;
 }
 
-export default function LoginExperience() {
+export default function LoginExperience(props: { variant?: 'login' | 'signup' } = {}) {
+  const variant = props.variant || 'login';
   const { data: session, status } = useSession();
   const router = useRouter();
   const [providerStatus, setProviderStatus] = useState<ProviderStatus>({});
@@ -139,6 +141,11 @@ export default function LoginExperience() {
   };
 
   const isLoading = status === 'loading';
+  const title = variant === 'signup' ? 'Create Your Account' : 'Secure Recovery Login';
+  const subtitle =
+    variant === 'signup'
+      ? 'Start with a social provider. After signing in, you can add passkey biometrics.'
+      : 'Sign in with social identity or passkey biometrics.';
 
   return (
     <main className="auth-shell">
@@ -147,10 +154,8 @@ export default function LoginExperience() {
       <div className="auth-cityline" />
 
       <section className="auth-card" aria-busy={busyAction !== null || isLoading}>
-        <h1 className="auth-title">Secure Recovery Login</h1>
-        <p className="auth-subtitle">
-          Sign in with social identity or passkey biometrics.
-        </p>
+        <h1 className="auth-title">{title}</h1>
+        <p className="auth-subtitle">{subtitle}</p>
 
         <div className="auth-provider-grid">
           {providerButtons.map((provider) => {
@@ -212,6 +217,18 @@ export default function LoginExperience() {
           Configured social providers: {configuredCount} / {providerButtons.length}
         </p>
         {notice ? <p className="auth-notice">{notice}</p> : null}
+
+        <div className="auth-alt">
+          {variant === 'signup' ? (
+            <p>
+              Already have an account? <Link href="/auth/login">Sign in</Link>
+            </p>
+          ) : (
+            <p>
+              New here? <Link href="/auth/signup">Create an account</Link>
+            </p>
+          )}
+        </div>
       </section>
     </main>
   );

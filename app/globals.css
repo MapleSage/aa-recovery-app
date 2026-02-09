@@ -1667,6 +1667,22 @@ a:hover {
   color: #37516f;
 }
 
+.auth-alt {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #304e6b;
+}
+
+.auth-alt a {
+  color: #0f3557;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-alt a:hover {
+  text-decoration: underline;
+}
+
 @keyframes auth-fade-in {
   from {
     opacity: 0;
